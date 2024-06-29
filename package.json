@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack serve --open"
+    "start": "nodemon ./server.js",
+    "dev": "nodemon ./server.js & webpack serve --open"
   },
   "author": "",
   "license": "ISC",
@@ -33,6 +34,7 @@
     "globals": "^15.6.0",
     "html-loader": "^5.0.0",
     "html-webpack-plugin": "^5.6.0",
+    "nodemon": "^3.1.4",
     "style-loader": "^4.0.0",
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4",

@@ -29,8 +29,8 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          "style-loader",
-          "css-loader"
+          'style-loader',
+          'css-loader'
         ],
       }
     ],
@@ -49,7 +49,7 @@ module.exports = {
     port: 8080,
     proxy: [
       {
-        context: ['/api'],
+        context: ['/kits'],
         target: 'http://localhost:3000'
       },
     ],
