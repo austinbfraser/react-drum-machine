@@ -5,10 +5,18 @@ import './style.css';
 
 const App = () => {
   const handleClick = async () => {
-    const synth = new Tone.Synth().toDestination();
+    
     await Tone.start();
     console.log('audio is running');
-    synth.triggerAttackRelease("C4", "8n");
+    const sampler = new Tone.Sampler({
+      urls: {
+        A1: "BD_2.wav",
+      },
+      baseUrl: "https://github.com/austinbfraser/react-drum-machine/raw/main/kits/909/",
+      onload: () => {
+        sampler.triggerAttackRelease(["A1", "A1", "A1", "A1"], 0.5);
+      }
+    }).toDestination();
   };
   return (
     <>
