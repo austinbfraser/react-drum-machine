@@ -6,8 +6,23 @@ import './style.css';
 const App = () => {
 
   Tone.Transport.bpm.value = 124;
-  const trackCount = 1;
+  const trackCount = 2;
   const blankSeq = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+  const seqState = [];
+  for (let i = 0; i < trackCount; i++) {
+    seqState.push([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
+  };
+
+  const [seq, updateSeq] = useState(seqState);
+  const cellClick = (trackNum, cellNum) => {
+    if (seq[trackNum - 1][cellNum - 1] === null) {
+      seq[trackNum - 1][cellNum - 1] = 'A1';
+    }
+    if (seq[trackNum - 1][cellNum - 1] !== null) {
+      seq[trackNum - 1][cellNum - 1] = null;
+    }
+    updateSeq({ ...seq });
+  }
 
   const sampler = new Tone.Sampler({
     urls: {
@@ -20,7 +35,7 @@ const App = () => {
     }
   }).toDestination();
 
-  const seq = new Tone.Sequence((time, note) => {
+  const demoSeq = new Tone.Sequence((time, note) => {
     sampler.triggerAttackRelease(note, 1, time);
     }, 
     ["A1", null, null, null, "A1", null, null, null, "A1", null, null, null, "A1", null, null, null], '16n').start(0);
@@ -56,6 +71,7 @@ const App = () => {
       <Sequencer 
         trackCount = {trackCount}
         blankSeq = {blankSeq}
+        cellClick = {cellClick}
       />
     </>
   );
@@ -80,14 +96,14 @@ const Stop = props => {
 }
 
 const Sequencer = props => {
-  // const [seq, updateSeq] = useState(props.blankSeq);
-  // const cellClick = (index) => {
-
-  // }
   const tracks = [];
   for (let i = 0; i < props.trackCount; i++) {
     tracks.push(
-      <Track />
+      <Track 
+        key = {`track${i + 1}`}
+        trackNum = {i + 1}
+        cellClick = {props.cellClick}
+      />
     )
   };
 
@@ -100,7 +116,13 @@ const Track = props => {
   const cells = [];
   for (let i = 0; i < 16; i++) {
     cells.push(
-      <Cell />
+      <Cell 
+      key = {`track_${props.trackNum}_cell_${i + 1}`}
+      trackNum = {props.trackNum}
+      cellNum = {i + 1}
+      id = {`track_${props.trackNum}_cell_${i + 1}`}
+      cellClick = {props.cellClick}
+      />
     );
   }
 
@@ -111,7 +133,10 @@ const Track = props => {
 
 const Cell = props => {
   return(
-    <button className = 'cell'></button>
+    <button className = 'cell' onClick = {() => {
+      console.log(`clicked trackNum ${props.trackNum} cellNum ${props.cellNum}`);
+      props.cellClick(props.trackNum, props.cellNum)
+    }}></button>
   )
 }
 
