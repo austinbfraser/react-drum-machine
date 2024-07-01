@@ -5,7 +5,7 @@ import './style.css';
 
 const App = () => {
 
-  Tone.Transport.bpm.value = 124;
+  Tone.getTransport().bpm.value = 124;
   const trackCount = 2;
   const blankSeq = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
   const seqState = [];
@@ -15,13 +15,20 @@ const App = () => {
 
   const [seq, updateSeq] = useState(seqState);
   const cellClick = (trackNum, cellNum) => {
-    if (seq[trackNum - 1][cellNum - 1] === null) {
-      seq[trackNum - 1][cellNum - 1] = 'A1';
-    }
-    if (seq[trackNum - 1][cellNum - 1] !== null) {
-      seq[trackNum - 1][cellNum - 1] = null;
-    }
-    updateSeq({ ...seq });
+    const nextSeq = seq.map((el, idx) => {
+      if (idx === (trackNum - 1)) {
+        const newArr = [...el];
+        if (newArr[cellNum - 1] === null) {
+          newArr[cellNum - 1] = 'A1';
+        }
+        else if (newArr[cellNum - 1] !== null) {
+          newArr[cellNum - 1] = null;
+        }
+        return newArr;
+      } else return el;
+    })
+    console.log('nextSeq: ', nextSeq)
+    updateSeq(nextSeq);
   }
 
   const sampler = new Tone.Sampler({
@@ -48,11 +55,11 @@ const App = () => {
   const startClick = async () => {
     await Tone.start();
     console.log('audio is running');
-    Tone.Transport.start();
+    Tone.getTransport().start();
   };
 
   const stopClick = () => {
-    Tone.Transport.stop();
+    Tone.getTransport().stop();
   }
 
   return (
@@ -70,7 +77,6 @@ const App = () => {
       <br></br>
       <Sequencer 
         trackCount = {trackCount}
-        blankSeq = {blankSeq}
         cellClick = {cellClick}
       />
     </>
@@ -135,7 +141,7 @@ const Cell = props => {
   return(
     <button className = 'cell' onClick = {() => {
       console.log(`clicked trackNum ${props.trackNum} cellNum ${props.cellNum}`);
-      props.cellClick(props.trackNum, props.cellNum)
+      props.cellClick(props.trackNum, props.cellNum);
     }}></button>
   )
 }
