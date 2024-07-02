@@ -6,8 +6,8 @@ import './style.css';
 const App = () => {
 
   Tone.getTransport().bpm.value = 124;
-  const trackCount = 2;
-  const blankSeq = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+  const trackCount = 9;
+  const demoSeq = ['A1', null, null, null, ['A1', 'B1', 'C1', 'B2'], null, null, null, 'A1', null, null, null, ['A1', 'B1'], null, null, null];
   const seqState = [];
   for (let i = 0; i < trackCount; i++) {
     seqState.push([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
@@ -16,11 +16,21 @@ const App = () => {
   const [seq, setSeq] = useState(seqState);
 
   const cellClick = (trackNum, cellNum) => {
+    let noteValue;
+    if (trackNum === 1) noteValue = 'A1'
+    if (trackNum === 2) noteValue = 'B1'
+    if (trackNum === 3) noteValue = 'C1'
+    if (trackNum === 4) noteValue = 'D1' 
+    if (trackNum === 5) noteValue = 'E1'
+    if (trackNum === 6) noteValue = 'F1'
+    if (trackNum === 7) noteValue = 'G1'
+    if (trackNum === 8) noteValue = 'A2'
+    if (trackNum === 9) noteValue = 'B2'
     const nextSeq = seq.map((el, idx) => {
       if (idx === (trackNum - 1)) {
         const newArr = [...el];
         if (newArr[cellNum - 1] === null) {
-          newArr[cellNum - 1] = 'A1';
+          newArr[cellNum - 1] = noteValue;
         }
         else if (newArr[cellNum - 1] !== null) {
           newArr[cellNum - 1] = null;
@@ -40,7 +50,15 @@ const App = () => {
   useEffect(() => {
     samplerRef.current = new Tone.Sampler({
       urls: {
-        A1: "BD_2.wav",
+        A1: 'BD_2.wav',
+        B1: 'Snare_2.wav',
+        C1: 'Clap.wav',
+        D1: 'Tom_1.wav',
+        E1: 'Tom_2.wav',
+        F1: 'Ride.wav',
+        G1: 'Crash.wav',
+        A2: 'CH_1.wav',
+        B2: 'OH.wav'
       },
       baseUrl: "http://localhost:3000/kits/909/",
       onload: () => {
@@ -127,13 +145,13 @@ const App = () => {
 
 const Start = props => {
   return(
-    <button className = 'start' onClick={props.startClick}>START</button>
+    <button className = 'start-stop' onClick={props.startClick}>START</button>
   )
 }
 
 const Stop = props => {
   return(
-    <button className = 'start' onClick={props.stopClick}>STOP</button>
+    <button className = 'start-stop' onClick={props.stopClick}>STOP</button>
   )
 }
 
@@ -151,7 +169,17 @@ const Sequencer = props => {
   };
 
   return(
-    <section className = 'sequencer'>{tracks}</section>
+    <section className = 'sequencer'>
+      <section className = 'trackContainer'><section className = 'trackLabel'>kick</section>{tracks[0]}</section>
+      <section className = 'trackContainer'><section className = 'trackLabel'>snare</section>{tracks[1]}</section>
+      <section className = 'trackContainer'><section className = 'trackLabel'>clap</section>{tracks[2]}</section>
+      <section className = 'trackContainer'><section className = 'trackLabel'>tom 1</section>{tracks[3]}</section>
+      <section className = 'trackContainer'><section className = 'trackLabel'>tom 2</section>{tracks[4]}</section>
+      <section className = 'trackContainer'><section className = 'trackLabel'>ride</section>{tracks[5]}</section>
+      <section className = 'trackContainer'><section className = 'trackLabel'>crash</section>{tracks[6]}</section>
+      <section className = 'trackContainer'><section className = 'trackLabel'>closed HH</section>{tracks[7]}</section>
+      <section className = 'trackContainer'><section className = 'trackLabel'>open HH</section>{tracks[8]}</section>
+      </section>
   )
 }
 

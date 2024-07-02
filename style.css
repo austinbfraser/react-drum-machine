@@ -1,17 +1,38 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
 .title {
   font-family: Arial, Helvetica, sans-serif;
 }
+.start-stop {
+  margin-bottom: 50px;
+}
+.sequencer {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+.trackContainer {
+  display: flex;
+  align-items: baseline;
+}
+.trackLabel {
+  margin-right: 10px;
+}
 .track {
-  margin-top: 50px;
+  margin-top: 10px;
 }
 .cell {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+  color: gray;
 }
 .cellActive {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+  color: gray;
+
   background-color: orange;
 }
