@@ -14,6 +14,7 @@ const App = () => {
   };
 
   const [seq, setSeq] = useState(seqState);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const cellClick = (trackNum, cellNum) => {
     let noteValue;
@@ -259,21 +260,20 @@ const App = () => {
   const startClick = async () => {
     await Tone.start();
     console.log('audio is running');
-    Tone.getTransport().start();
+    if (!isPlaying) {
+      Tone.getTransport().start();
+    } else Tone.getTransport().stop();
+    const flip = !isPlaying;
+    setIsPlaying(flip);
+    console.log('isPlaying: ', flip)
   };
-
-  const stopClick = () => {
-    Tone.getTransport().stop();
-  }
 
   return (
     <>
       <h1 className = 'title'>React Drum Machine</h1>
       <Start 
         startClick = {startClick}
-      />
-      <Stop 
-        stopClick = {stopClick}
+        isPlaying = {isPlaying}
       />
       <Reset 
         resetAll = {resetAll}
@@ -296,19 +296,13 @@ const App = () => {
 
 const Start = props => {
   return(
-    <button className = 'start-stop' onClick={props.startClick}>START</button>
-  )
-}
-
-const Stop = props => {
-  return(
-    <button className = 'start-stop' onClick={props.stopClick}>STOP</button>
+    <button className = {props.isPlaying ? 'start-stopActive' : 'start-stop'} onClick={props.startClick}>▶</button>
   )
 }
 
 const Reset = props => {
   return(
-    <button className = 'start-stop' onClick={props.resetAll}>RESET</button>
+    <button className = 'reset' onClick={props.resetAll}>RESET</button>
   )
 }
 
