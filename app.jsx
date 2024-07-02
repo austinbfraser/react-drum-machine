@@ -13,7 +13,8 @@ const App = () => {
     seqState.push([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
   };
 
-  const [seq, updateSeq] = useState(seqState);
+  const [seq, setSeq] = useState(seqState);
+
   const cellClick = (trackNum, cellNum) => {
     const nextSeq = seq.map((el, idx) => {
       if (idx === (trackNum - 1)) {
@@ -28,7 +29,7 @@ const App = () => {
       } else return el;
     })
     console.log('nextSeq: ', nextSeq)
-    updateSeq(nextSeq);
+    setSeq(nextSeq);
   }
 
   // NEW CODE BELOW --------------------------------------------------------------------------------------------
@@ -175,11 +176,16 @@ const Track = props => {
 }
 
 const Cell = props => {
+  const [isActive, setIsActive] = useState(false);
   return(
-    <button className = 'cell' onClick = {() => {
-      console.log(`clicked trackNum ${props.trackNum} cellNum ${props.cellNum}`);
-      props.cellClick(props.trackNum, props.cellNum);
-    }}>
+    <button 
+      className = {isActive ? 'cellActive' : 'cell'} 
+      onClick = {() => {
+        console.log(`clicked trackNum ${props.trackNum} cellNum ${props.cellNum}`);
+        props.cellClick(props.trackNum, props.cellNum);
+        setIsActive(!isActive);
+      }}
+    >
     </button>
   )
 }
