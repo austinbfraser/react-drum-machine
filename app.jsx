@@ -42,10 +42,10 @@ const App = () => {
     }
   }).toDestination();
 
-  const demoSeq = new Tone.Sequence((time, note) => {
+  const track1Seq = new Tone.Sequence((time, note) => {
     sampler.triggerAttackRelease(note, 1, time);
     }, 
-    ["A1", null, null, null, "A1", null, null, null, "A1", null, null, null, "A1", null, null, null], '16n').start(0);
+    seq[0], '16n').start(0);
 
   // const loadClick = async () => {
   //   await Tone.start();
@@ -78,6 +78,7 @@ const App = () => {
       <Sequencer 
         trackCount = {trackCount}
         cellClick = {cellClick}
+        seq = {seq}
       />
     </>
   );
@@ -109,6 +110,7 @@ const Sequencer = props => {
         key = {`track${i + 1}`}
         trackNum = {i + 1}
         cellClick = {props.cellClick}
+        seq = {props.seq}
       />
     )
   };
@@ -128,6 +130,7 @@ const Track = props => {
       cellNum = {i + 1}
       id = {`track_${props.trackNum}_cell_${i + 1}`}
       cellClick = {props.cellClick}
+      seq = {props.seq}
       />
     );
   }
@@ -142,7 +145,7 @@ const Cell = props => {
     <button className = 'cell' onClick = {() => {
       console.log(`clicked trackNum ${props.trackNum} cellNum ${props.cellNum}`);
       props.cellClick(props.trackNum, props.cellNum);
-    }}></button>
+    }}>{props.seq[props.trackNum - 1][props.cellNum - 1]}</button>
   )
 }
 
