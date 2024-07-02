@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import * as Tone from "tone";
 import './style.css';
@@ -31,21 +31,55 @@ const App = () => {
     updateSeq(nextSeq);
   }
 
-  const sampler = new Tone.Sampler({
-    urls: {
-      A1: "BD_2.wav",
-    },
-    baseUrl: "http://localhost:3000/kits/909/",
-    onload: () => {
-      console.log('samples loaded');
-      // sampler.triggerAttackRelease(["A1"], 1);
-    }
-  }).toDestination();
+  // NEW CODE BELOW --------------------------------------------------------------------------------------------
 
-  const track1Seq = new Tone.Sequence((time, note) => {
-    sampler.triggerAttackRelease(note, 1, time);
-    }, 
-    seq[0], '16n').start(0);
+  const samplerRef = useRef(null);
+  const sequenceRef = useRef(null);
+
+  useEffect(() => {
+    samplerRef.current = new Tone.Sampler({
+      urls: {
+        A1: "BD_2.wav",
+      },
+      baseUrl: "http://localhost:3000/kits/909/",
+      onload: () => {
+        console.log('samples loaded');
+      }
+    }).toDestination();
+
+    sequenceRef.current = new Tone.Sequence((time, note) => {
+      samplerRef.current.triggerAttackRelease(note, 1, time);
+    }, seq[0], '16n').start(0);
+
+    return () => {
+      sequenceRef.current.dispose();
+      samplerRef.current.dispose();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (sequenceRef.current) {
+      sequenceRef.current.set({ events: seq[0] });
+    }
+  }, [seq]);
+
+  // NEW CODE ^^^^^ --------------------------------------------------------------------------------------------
+
+  // const sampler = new Tone.Sampler({
+  //   urls: {
+  //     A1: "BD_2.wav",
+  //   },
+  //   baseUrl: "http://localhost:3000/kits/909/",
+  //   onload: () => {
+  //     console.log('samples loaded');
+  //     // sampler.triggerAttackRelease(["A1"], 1);
+  //   }
+  // }).toDestination();
+
+  // const track1Seq = new Tone.Sequence((time, note) => {
+  //   sampler.triggerAttackRelease(note, 1, time);
+  //   }, 
+  //   seq[0], '16n').start(0);
 
   // const loadClick = async () => {
   //   await Tone.start();
@@ -145,7 +179,8 @@ const Cell = props => {
     <button className = 'cell' onClick = {() => {
       console.log(`clicked trackNum ${props.trackNum} cellNum ${props.cellNum}`);
       props.cellClick(props.trackNum, props.cellNum);
-    }}>{props.seq[props.trackNum - 1][props.cellNum - 1]}</button>
+    }}>
+    </button>
   )
 }
 
