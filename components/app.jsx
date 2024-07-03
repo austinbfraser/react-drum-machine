@@ -10,32 +10,19 @@ const App = () => {
   const trackCount = 11;
 
   const [tempo, setTempo] = useState(120);
-
-
   Tone.getTransport().bpm.value = tempo;
-
-  const [currentStep, setCurrentStep] = useState(0);
-  const repeat = () => {
-   setCurrentStep((prevStep) => {
-      const nextStep = prevStep === 15 ? 0 : prevStep + 1;
-      console.log('currentStep: ', nextStep);
-      return nextStep;
-    });
-  };
-  Tone.getTransport().scheduleRepeat(repeat, '16n');
-
-
+  
   const seqState = [];
   for (let i = 0; i < trackCount; i++) {
     seqState.push([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
   };
-
+  
   const [seq, setSeq] = useState(seqState);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const cellClick = (trackNum, cellNum) => {
     let noteValue = 'A1';
-
     const nextSeq = seq.map((el, idx) => {
       if (idx === (trackNum - 1)) {
         const newArr = [...el];
@@ -48,7 +35,6 @@ const App = () => {
         return newArr;
       } else return el;
     })
-    // console.log('nextSeq: ', nextSeq);
     setSeq(nextSeq);
   }
 
@@ -64,6 +50,7 @@ const App = () => {
   // NEW CODE BELOW --------------------------------------------------------------------------------------------
   const samplerRef = useRef(null);
   const sequenceRef = useRef(null);
+  const stepperRef = useRef(null);
 
   useEffect(() => {
     samplerRef.current = [];
@@ -246,10 +233,34 @@ const App = () => {
     }, seq[10], '16n').start(0);
     sequenceRef.current.push(seq10);
 
+    stepperRef.current = Tone.getTransport().scheduleRepeat(() => {
+      setCurrentStep((prevStep) => {
+        const nextStep = prevStep === 15 ? 0 : prevStep + 1;
+        console.log('currentStep: ', nextStep);
+        return nextStep;
+      });
+    }, '16n');
+    
+    
+    // const repeat = () => {
+    //   setCurrentStep((prevStep) => {
+    //      const nextStep = prevStep === 15 ? 0 : prevStep + 1;
+    //      console.log('currentStep: ', nextStep);
+    //      return nextStep;
+    //    });
+    //  };
+
+    //  Tone.getTransport().scheduleRepeat(() => {
+    //   if (stepperRef.current === 16) stepperRef.current = 0
+    //   console.log('stepperRef.current: ', stepperRef.current)
+    //   stepperRef.current++
+    //  }, '16n');
+
     return () => {
       for (let i = 0; i < trackCount; i++) {
         sequenceRef.current[i].dispose();
         samplerRef.current[i].dispose();
+        stepperRef.current.dispose();
       }
     };
   }, []);
@@ -268,6 +279,7 @@ const App = () => {
     await Tone.start();
     console.log('audio is running');
     if (!isPlaying) {
+      setCurrentStep(0);
       Tone.getTransport().start();
     } else Tone.getTransport().stop();
     const flip = !isPlaying;
