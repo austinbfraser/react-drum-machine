@@ -6,6 +6,7 @@ body {
 }
 .start-stop {
   margin-bottom: 50px;
+  margin-right: 10px;
   width: 70px;
   height: 70px;
 
@@ -13,6 +14,7 @@ body {
 }
 .start-stopActive {
   margin-bottom: 50px;
+  margin-right: 10px;
   width: 70px;
   height: 70px;
   background-color: lightgreen;
@@ -50,4 +52,12 @@ body {
   color: gray;
 
   background-color: orange;
+}
+.cellCurrentStep {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  color: gray;
+
+  background-color: white;
 }

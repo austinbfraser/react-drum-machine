@@ -1,12 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createRoot } from 'react-dom/client';
-import * as Tone from "tone";
-import './style.css';
+import * as Tone from 'tone';
+import Start from './start.jsx';
+import Reset from './reset.jsx';
+import Sequencer from './sequencer.jsx';
 
 const App = () => {
 
-  Tone.getTransport().bpm.value = 124;
   const trackCount = 11;
+
+  const [tempo, setTempo] = useState(120);
+
+
+  Tone.getTransport().bpm.value = tempo;
+
+  const [currentStep, setCurrentStep] = useState(0);
+  const repeat = () => {
+   setCurrentStep((prevStep) => {
+      const nextStep = prevStep === 15 ? 0 : prevStep + 1;
+      console.log('currentStep: ', nextStep);
+      return nextStep;
+    });
+  };
+  Tone.getTransport().scheduleRepeat(repeat, '16n');
+
 
   const seqState = [];
   for (let i = 0; i < trackCount; i++) {
@@ -183,7 +199,7 @@ const App = () => {
       samplerRef.current.push(sampler11);
 
     sequenceRef.current = [];
-
+    
     let seq0 = new Tone.Sequence((time, note) => {
       samplerRef.current[0].triggerAttackRelease(note, 1, time);
     }, seq[0], '16n').start(0);
@@ -283,95 +299,13 @@ const App = () => {
         trackCount = {trackCount}
         cellClick = {cellClick}
         seq = {seq}
+        currentStep = {currentStep}
+        isPlaying = {isPlaying}
       />
     </>
   );
 };
 
-// const Load = props => {
-//   return(
-//     <button className = 'load' onClick={props.loadClick}>LOAD</button>
-//   )
-// }
 
-const Start = props => {
-  return(
-    <button className = {props.isPlaying ? 'start-stopActive' : 'start-stop'} onClick={props.startClick}>▶</button>
-  )
-}
 
-const Reset = props => {
-  return(
-    <button className = 'reset' onClick={props.resetAll}>RESET</button>
-  )
-}
-
-const Sequencer = props => {
-  const tracks = [];
-  for (let i = 0; i < props.trackCount; i++) {
-    tracks.push(
-      <Track 
-        key = {`track${i + 1}`}
-        trackNum = {i + 1}
-        cellClick = {props.cellClick}
-        seq = {props.seq}
-      />
-    )
-  };
-
-  return(
-    <section className = 'sequencer'>
-      <section className = 'trackContainer'><section className = 'trackLabel'>kick</section>{tracks[0]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>snare</section>{tracks[1]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>clap</section>{tracks[2]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>tom lo</section>{tracks[3]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>tom mid</section>{tracks[4]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>tom hi</section>{tracks[5]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>rim</section>{tracks[6]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>crash</section>{tracks[7]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>ride</section>{tracks[8]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>closed HH</section>{tracks[9]}</section>
-      <section className = 'trackContainer'><section className = 'trackLabel'>open HH</section>{tracks[10]}</section>
-      </section>
-  )
-}
-
-const Track = props => {
-  const cells = [];
-  for (let i = 0; i < 16; i++) {
-    cells.push(
-      <Cell 
-      key = {`track_${props.trackNum}_cell_${i + 1}`}
-      trackNum = {props.trackNum}
-      cellNum = {i + 1}
-      id = {`track_${props.trackNum}_cell_${i + 1}`}
-      cellClick = {props.cellClick}
-      seq = {props.seq}
-      />
-    );
-  }
-
-  return(
-    <section className = 'track'>{cells}</section>
-  );
-}
-
-const Cell = props => {
-  // const [isActive, setIsActive] = useState(false);
-  let isActive = false;
-  if (props.seq[props.trackNum - 1][props.cellNum - 1] !== null) isActive = true; 
-  return(
-    <button 
-      className = {isActive ? 'cellActive' : 'cell'} 
-      onClick = {() => {
-        console.log(`clicked trackNum ${props.trackNum} cellNum ${props.cellNum}`);
-        props.cellClick(props.trackNum, props.cellNum);
-        // setIsActive(!isActive);
-      }}
-    >
-    </button>
-  )
-}
-
-const root = createRoot(document.querySelector('#root'));
-root.render(<App />);
+export default App;

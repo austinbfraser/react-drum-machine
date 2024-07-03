@@ -5,7 +5,7 @@ const current_mode = 'development';
 // const current_mode = process.env.NODE_ENV == 'production' ? 'production' : 'development';
 
 module.exports = {
-  entry: './app.jsx',
+  entry: './index.js',
   mode: current_mode,
   output: {
     path: path.resolve(__dirname, 'build'),
