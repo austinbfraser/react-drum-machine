@@ -7,7 +7,7 @@ const Tempo = props => {
     console.log(value);
   }
   return(
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='tempoForm'>
       <label>
           Tempo: <input className = 'tempoInput' defaultValue = {props.tempo} onChange={e => props.setTempo(e.target.value)} name="tempo" />
       </label>

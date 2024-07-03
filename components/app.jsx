@@ -11,12 +11,7 @@ const App = () => {
 
   const [tempo, setTempo] = useState(120);
   Tone.getTransport().bpm.value = tempo;
-  
-  const seqState = [];
-  for (let i = 0; i < trackCount; i++) {
-    seqState.push([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
-  };
-  
+  const seqState = Array(trackCount).fill(Array(16).fill(null));
   const [seq, setSeq] = useState(seqState);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -26,255 +21,61 @@ const App = () => {
     const nextSeq = seq.map((el, idx) => {
       if (idx === (trackNum - 1)) {
         const newArr = [...el];
-        if (newArr[cellNum - 1] === null) {
-          newArr[cellNum - 1] = noteValue;
-        }
-        else if (newArr[cellNum - 1] !== null) {
-          newArr[cellNum - 1] = null;
-        }
+        newArr[cellNum - 1] = newArr[cellNum - 1] === null ? noteValue : null;
         return newArr;
       } else return el;
     })
     setSeq(nextSeq);
-  }
+  };
 
   const resetTrackFunc = (trackNum) => {
     const nextSeq = seq.map((el, idx) => {
       if (idx === (trackNum - 1)) {
-        const blankSeq = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-        return blankSeq
+        return Array(16).fill(null);
       } else return el
     });
     setSeq(nextSeq);
   };
 
   const resetAll = () => {
-    const nextSeq = [];
-    for (let i = 0; i < trackCount; i++) {
-      nextSeq.push([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
-    };
-    console.log('nextSeq: ', nextSeq)
+    const nextSeq = Array(trackCount).fill(Array(16).fill(null));
     setSeq(nextSeq);
-  }
+  };
 
-  
-
-
-  // NEW CODE BELOW --------------------------------------------------------------------------------------------
-  const samplerRef = useRef(null);
-  const sequenceRef = useRef(null);
+  // SAMPLER AND SEQUENCER CODE --------------------------------------------------------------------------------------------
+  const samplerRef = useRef([]);
+  const sequenceRef = useRef([]);
   const stepperRef = useRef(null);
 
   useEffect(() => {
-    samplerRef.current = [];
+    const baseUrl = "http://localhost:3000/kits/909/";
+    const sampleFiles = [
+      'BD.wav', 'Snare.wav', 'Clap.wav', 'Tom_1.wav', 'Tom_2.wav',
+      'Tom_3.wav', 'Rim.wav', 'Crash.wav', 'Ride.wav', 'CH.wav', 'OH.wav'
+    ];
 
-    let sampler1 = new Tone.Sampler({
-        urls: {
-          A1: 'BD.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler1 loaded');
-        }
+    samplerRef.current = sampleFiles.map((file, index) => {
+      return new Tone.Sampler({
+        urls: { A1: file },
+        baseUrl,
+        onload: () => console.log(`sampler${index + 1} loaded`),
       }).toDestination();
-      samplerRef.current.push(sampler1);
+    });
     
-      let sampler2 = new Tone.Sampler({
-        urls: {
-          A1: 'Snare.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler2 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler2);
-
-      let sampler3 = new Tone.Sampler({
-        urls: {
-          A1: 'Clap.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler3 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler3);
-
-      let sampler4 = new Tone.Sampler({
-        urls: {
-          A1: 'Tom_1.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler4 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler4);
-
-      let sampler5 = new Tone.Sampler({
-        urls: {
-          A1: 'Tom_2.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler5 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler5);
-
-      let sampler6 = new Tone.Sampler({
-        urls: {
-          A1: 'Tom_3.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler6 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler6);
-
-      let sampler7 = new Tone.Sampler({
-        urls: {
-          A1: 'Rim.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler7 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler7);
-
-      let sampler8 = new Tone.Sampler({
-        urls: {
-          A1: 'Crash.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler8 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler8);
-
-      let sampler9= new Tone.Sampler({
-        urls: {
-          A1: 'Ride.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler9 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler9);
-
-      let sampler10 = new Tone.Sampler({
-        urls: {
-          A1: 'CH.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler10 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler10);
-
-      let sampler11 = new Tone.Sampler({
-        urls: {
-          A1: 'OH.wav',
-        },
-        baseUrl: "http://localhost:3000/kits/909/",
-        onload: () => {
-          console.log('sampler11 loaded');
-        }
-      }).toDestination();
-      samplerRef.current.push(sampler11);
-
-    sequenceRef.current = [];
-    
-    let seq0 = new Tone.Sequence((time, note) => {
-      samplerRef.current[0].triggerAttackRelease(note, 1, time);
-    }, seq[0], '16n').start(0);
-    sequenceRef.current.push(seq0);
-
-    let seq1 = new Tone.Sequence((time, note) => {
-      samplerRef.current[1].triggerAttackRelease(note, 1, time);
-    }, seq[1], '16n').start(0);
-    sequenceRef.current.push(seq1);
-
-    let seq2 = new Tone.Sequence((time, note) => {
-      samplerRef.current[2].triggerAttackRelease(note, 1, time);
-    }, seq[2], '16n').start(0);
-    sequenceRef.current.push(seq2);
-
-    let seq3 = new Tone.Sequence((time, note) => {
-      samplerRef.current[3].triggerAttackRelease(note, 1, time);
-    }, seq[3], '16n').start(0);
-    sequenceRef.current.push(seq3);
-
-    let seq4 = new Tone.Sequence((time, note) => {
-      samplerRef.current[4].triggerAttackRelease(note, 1, time);
-    }, seq[4], '16n').start(0);
-    sequenceRef.current.push(seq4);
-
-    let seq5 = new Tone.Sequence((time, note) => {
-      samplerRef.current[5].triggerAttackRelease(note, 1, time);
-    }, seq[5], '16n').start(0);
-    sequenceRef.current.push(seq5);
-
-    let seq6 = new Tone.Sequence((time, note) => {
-      samplerRef.current[6].triggerAttackRelease(note, 1, time);
-    }, seq[6], '16n').start(0);
-    sequenceRef.current.push(seq6);
-
-    let seq7 = new Tone.Sequence((time, note) => {
-      samplerRef.current[7].triggerAttackRelease(note, 1, time);
-    }, seq[7], '16n').start(0);
-    sequenceRef.current.push(seq7);
-
-    let seq8 = new Tone.Sequence((time, note) => {
-      samplerRef.current[8].triggerAttackRelease(note, 1, time);
-    }, seq[8], '16n').start(0);
-    sequenceRef.current.push(seq8);
-
-    let seq9 = new Tone.Sequence((time, note) => {
-      samplerRef.current[9].triggerAttackRelease(note, 1, time);
-    }, seq[9], '16n').start(0);
-    sequenceRef.current.push(seq9);
-
-    let seq10 = new Tone.Sequence((time, note) => {
-      samplerRef.current[10].triggerAttackRelease(note, 1, time);
-    }, seq[10], '16n').start(0);
-    sequenceRef.current.push(seq10);
+    sequenceRef.current = samplerRef.current.map((sampler, index) => {
+      return new Tone.Sequence((time, note) => {
+        sampler.triggerAttackRelease(note, 1, time);
+      }, seq[index], '16n').start(0);
+    });
 
     stepperRef.current = Tone.getTransport().scheduleRepeat(() => {
-      setCurrentStep((prevStep) => {
-        const nextStep = prevStep === 15 ? 0 : prevStep + 1;
-        console.log('currentStep: ', nextStep);
-        return nextStep;
-      });
-    }, '16n');
-    
-    
-    // const repeat = () => {
-    //   setCurrentStep((prevStep) => {
-    //      const nextStep = prevStep === 15 ? 0 : prevStep + 1;
-    //      console.log('currentStep: ', nextStep);
-    //      return nextStep;
-    //    });
-    //  };
-
-    //  Tone.getTransport().scheduleRepeat(() => {
-    //   if (stepperRef.current === 16) stepperRef.current = 0
-    //   console.log('stepperRef.current: ', stepperRef.current)
-    //   stepperRef.current++
-    //  }, '16n');
+      setCurrentStep((prevStep) => (prevStep + 1) % 16);
+    }, '16n', '16n');
 
     return () => {
-      for (let i = 0; i < trackCount; i++) {
-        sequenceRef.current[i].dispose();
-        samplerRef.current[i].dispose();
-        stepperRef.current.dispose();
-      }
+      sequenceRef.current.forEach(seq => seq.dispose());
+      samplerRef.current.forEach(sampler => sampler.dispose());
+      stepperRef.current.dispose();
     };
   }, []);
 
@@ -286,7 +87,7 @@ const App = () => {
     }
   }, [seq]);
 
-  // NEW CODE ^^^^^ --------------------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------------------------------------------------
 
   const startClick = async () => {
     await Tone.start();

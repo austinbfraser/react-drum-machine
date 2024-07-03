@@ -51,10 +51,12 @@ body {
 }
 .trackContainer {
   display: flex;
-  align-items:end
+  align-items: end;
 }
 .trackLabel {
   margin-right: 10px;
+  display: flex;
+  align-items: flex-end;
 }
 .track {
   margin-top: 10px;
