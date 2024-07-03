@@ -40,7 +40,7 @@ body {
 .tempoInput {
   font-size: 50px;
   height: 64px;
-  width: 100px;
+  width: 88px;
   background-color: #3D0A12;
   color: #CA0606;
 }
@@ -51,13 +51,20 @@ body {
 }
 .trackContainer {
   display: flex;
-  align-items: baseline;
+  align-items:end
 }
 .trackLabel {
   margin-right: 10px;
 }
 .track {
   margin-top: 10px;
+}
+.resetTrack {
+  border: 1px solid gray;
+  color: gray;
+  border-radius: 20px;
+  margin-bottom: 1px;
+  margin-right: 10px;
 }
 .cell {
   width: 30px;

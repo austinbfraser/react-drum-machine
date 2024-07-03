@@ -38,6 +38,16 @@ const App = () => {
     setSeq(nextSeq);
   }
 
+  const resetTrackFunc = (trackNum) => {
+    const nextSeq = seq.map((el, idx) => {
+      if (idx === (trackNum - 1)) {
+        const blankSeq = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+        return blankSeq
+      } else return el
+    });
+    setSeq(nextSeq);
+  };
+
   const resetAll = () => {
     const nextSeq = [];
     for (let i = 0; i < trackCount; i++) {
@@ -46,6 +56,9 @@ const App = () => {
     console.log('nextSeq: ', nextSeq)
     setSeq(nextSeq);
   }
+
+  
+
 
   // NEW CODE BELOW --------------------------------------------------------------------------------------------
   const samplerRef = useRef(null);
@@ -311,6 +324,7 @@ const App = () => {
         seq = {seq}
         currentStep = {currentStep}
         isPlaying = {isPlaying}
+        resetTrackFunc = {resetTrackFunc}
       />
       </div>
     </>
