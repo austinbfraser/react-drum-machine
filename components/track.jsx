@@ -7,8 +7,8 @@ const Track = props => {
   for (let i = 0; i < 16; i++) {
     cells.push(
       <Cell 
-      key = {keys[i]}
-      // key = {`track_${props.trackNum}_cell_${i + 1}`}
+      // key = {keys[i]}
+      key = {`track_${props.trackNum}_cell_${i + 1}`}
       trackNum = {props.trackNum}
       cellNum = {i + 1}
       id = {`track_${props.trackNum}_cell_${i + 1}`}

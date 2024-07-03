@@ -3,6 +3,7 @@ import * as Tone from 'tone';
 import Start from './start.jsx';
 import Reset from './reset.jsx';
 import Sequencer from './sequencer.jsx';
+import Tempo from './tempo.jsx';
 
 const App = () => {
 
@@ -33,17 +34,7 @@ const App = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const cellClick = (trackNum, cellNum) => {
-    let noteValue;
-    // if (trackNum === 1) noteValue = 'A1'
-    // if (trackNum === 2) noteValue = 'B1'
-    // if (trackNum === 3) noteValue = 'C1'
-    // if (trackNum === 4) noteValue = 'D1' 
-    // if (trackNum === 5) noteValue = 'E1'
-    // if (trackNum === 6) noteValue = 'F1'
-    // if (trackNum === 7) noteValue = 'G1'
-    // if (trackNum === 8) noteValue = 'A2'
-    // if (trackNum === 9) noteValue = 'B2'
-    noteValue = 'A1';
+    let noteValue = 'A1';
 
     const nextSeq = seq.map((el, idx) => {
       if (idx === (trackNum - 1)) {
@@ -57,7 +48,7 @@ const App = () => {
         return newArr;
       } else return el;
     })
-    console.log('nextSeq: ', nextSeq)
+    // console.log('nextSeq: ', nextSeq);
     setSeq(nextSeq);
   }
 
@@ -286,7 +277,9 @@ const App = () => {
 
   return (
     <>
+      <div className='mainContainer'>
       <h1 className = 'title'>React Drum Machine</h1>
+      <div className = 'globalControls'>
       <Start 
         startClick = {startClick}
         isPlaying = {isPlaying}
@@ -294,6 +287,11 @@ const App = () => {
       <Reset 
         resetAll = {resetAll}
       />
+      <Tempo 
+        tempo = {tempo}
+        setTempo = {setTempo}
+      />
+      </div>
       <br></br>
       <Sequencer 
         trackCount = {trackCount}
@@ -302,10 +300,9 @@ const App = () => {
         currentStep = {currentStep}
         isPlaying = {isPlaying}
       />
+      </div>
     </>
   );
 };
-
-
 
 export default App;
