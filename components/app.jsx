@@ -4,6 +4,7 @@ import Start from './start.jsx';
 import Reset from './reset.jsx';
 import Sequencer from './sequencer.jsx';
 import Tempo from './tempo.jsx';
+import MainGain from './mainGain.jsx';
 
 const App = () => {
 
@@ -11,6 +12,7 @@ const App = () => {
 
   const [tempo, setTempo] = useState(120);
   Tone.getTransport().bpm.value = tempo;
+  const [gain, setGain] = useState(Array(12).fill(.8))
   const seqState = Array(trackCount).fill(Array(16).fill(null));
   const [seq, setSeq] = useState(seqState);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -42,12 +44,25 @@ const App = () => {
     setSeq(nextSeq);
   };
 
+  const updateGain = (index, value) => {
+    console.log(`updateGain fired, index ${index} value ${value}`);
+    console.log('gain: ', gain);
+    const nextGain = gain.map((el, idx) => {
+      if (idx === index) return value
+      else return el
+    });
+    setGain(nextGain);
+  }
+
   // SAMPLER AND SEQUENCER CODE --------------------------------------------------------------------------------------------
   const samplerRef = useRef([]);
   const sequenceRef = useRef([]);
   const stepperRef = useRef(null);
+  const gainNodeRef = useRef(null);
 
   useEffect(() => {
+    gainNodeRef.current = new Tone.Gain(gain[0]).toDestination();
+
     const baseUrl = "http://localhost:3000/kits/909/";
     const sampleFiles = [
       'BD.wav', 'Snare.wav', 'Clap.wav', 'Tom_1.wav', 'Tom_2.wav',
@@ -59,7 +74,7 @@ const App = () => {
         urls: { A1: file },
         baseUrl,
         onload: () => console.log(`sampler${index + 1} loaded`),
-      }).toDestination();
+      }).connect(gainNodeRef.current);
     });
     
     sequenceRef.current = samplerRef.current.map((sampler, index) => {
@@ -72,10 +87,13 @@ const App = () => {
       setCurrentStep((prevStep) => (prevStep + 1) % 16);
     }, '16n', '16n');
 
+    
+
     return () => {
       sequenceRef.current.forEach(seq => seq.dispose());
       samplerRef.current.forEach(sampler => sampler.dispose());
       stepperRef.current.dispose();
+      gainNodeRef.current.dispose();
     };
   }, []);
 
@@ -86,6 +104,19 @@ const App = () => {
       }
     }
   }, [seq]);
+
+  useEffect(() => {
+    if (gainNodeRef.current) {
+      gainNodeRef.current.gain.exponentialRampToValueAtTime(gain[0], Tone.now() + .2);
+    }
+  }, [gain]);
+
+
+  // useEffect(() => {
+  //   if (mainGain) {
+  //     mainGain.gain.set({ events: gain[0] });
+  //   }
+  // }, [gain]);
 
   // ------------------------------------------------------------------------------------------------------------------------
 
@@ -117,6 +148,12 @@ const App = () => {
         tempo = {tempo}
         setTempo = {setTempo}
       />
+      <section className='mainGainContainer'>
+      <MainGain 
+        gain = {gain}
+        updateGain = {updateGain}
+      />
+      </section>
       </div>
       <br></br>
       <Sequencer 

@@ -4,7 +4,6 @@ const Tempo = props => {
   function handleSubmit(e) {
     e.preventDefault();
     const value = e.target;
-    console.log(value);
   }
   return(
     <form onSubmit={handleSubmit} className='tempoForm'>

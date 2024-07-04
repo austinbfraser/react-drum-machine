@@ -43,6 +43,13 @@ body {
   width: 88px;
   background-color: #3D0A12;
   color: #CA0606;
+  margin-right: 10px;
+}
+.mainGainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 10px;
 }
 .sequencer {
   display: flex;
@@ -73,12 +80,14 @@ body {
   height: 30px;
   margin-right: 5px;
   color: gray;
+  cursor: pointer;
 }
 .cellActive {
   width: 30px;
   height: 30px;
   margin-right: 5px;
   color: gray;
+  cursor: pointer;
 
   background-color: #FF7D01;
 }
@@ -87,6 +96,7 @@ body {
   height: 30px;
   margin-right: 5px;
   color: gray;
+  cursor: pointer;
 
   background-color: white;
 }
@@ -95,7 +105,32 @@ body {
   height: 30px;
   margin-right: 5px;
   color: gray;
+  cursor: pointer;
 
   background-color: #FF7D01;
   box-shadow: 0 0 5px 7px #FF7D01;
+}
+.fader {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: #EFEFEF;
+  border: 1px solid gray;
+  height: 5px;
+  width: 80px;
+  margin-bottom: 13px;
+}
+.fader::-webkit-slider-runnable-track {
+  margin-top: 12px;
+}
+.fader::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+   appearance: none;
+   margin-top: -12px; /* Centers thumb on the track */
+
+   /*custom styles*/
+   background-color: #2A3656;
+   height: 15px;
+   width: 5px;
 }

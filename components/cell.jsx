@@ -16,7 +16,7 @@ const Cell = props => {
     <button 
       className = {cellColoring} 
       onClick = {() => {
-        console.log(`clicked id ${props.id} trackNum ${props.trackNum} cellNum ${props.cellNum}`);
+        // console.log(`clicked id ${props.id} trackNum ${props.trackNum} cellNum ${props.cellNum}`);
         props.cellClick(props.trackNum, props.cellNum);
       }}
     >
