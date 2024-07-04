@@ -2,6 +2,12 @@ import React from 'react';
 
 const Cell = props => {
   let cellColoring;
+  let downbeats = false;
+  if (props.cellNum === 1 ||
+      props.cellNum === 5 ||
+      props.cellNum === 9 ||
+      props.cellNum === 13
+  ) downbeats = true;
   if ((props.seq[props.trackNum - 1][props.cellNum - 1] !== null) && (props.currentStep === (props.cellNum - 1) && props.isPlaying)) cellColoring = 'cellActiveAndCurrentStep'
   else if (props.seq[props.trackNum - 1][props.cellNum - 1] !== null) cellColoring = 'cellActive'
   else if (props.currentStep === (props.cellNum - 1) && props.isPlaying) cellColoring = 'cellCurrentStep'
@@ -14,6 +20,7 @@ const Cell = props => {
         props.cellClick(props.trackNum, props.cellNum);
       }}
     >
+      {downbeats? 'O' : '-'}
     </button>
   )
 }
