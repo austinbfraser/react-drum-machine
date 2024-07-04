@@ -80,6 +80,15 @@ body {
   margin-right: 10px;
   cursor: pointer;
 }
+.randomizeTrack {
+  border: 1px solid gray;
+  color: #2A3656;
+  background-color: #FF7D01;
+  border-radius: 20px;
+  margin-bottom: 1px;
+  margin-right: 10px;
+  cursor: pointer;
+}
 .cell {
   width: 30px;
   height: 30px;

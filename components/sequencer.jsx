@@ -1,10 +1,12 @@
 import React from 'react';
 import Track from './track.jsx';
 import ResetTrack from './resetTrack.jsx';
+import RandomizeTrack from './randomizeTrack.jsx';
 
 const Sequencer = props => {
   const tracks = [];
   const resetTracks = [];
+  const randomizeTracks = [];
   const fullTracks = [];
   const trackLabels = [];
   const trackLabelStrings = [
@@ -38,11 +40,24 @@ const Sequencer = props => {
         resetTrackFunc = {props.resetTrackFunc}
       />
     )
+    randomizeTracks.push(
+      <RandomizeTrack
+        key = {`randomizeTrack${i + 1}`}
+        trackNum = {i + 1}
+        resetTrackFunc = {props.resetTrackFunc}
+        randomizeTrackFunc = {props.randomizeTrackFunc}
+      />
+    );
     trackLabels.push(
       <section key = {`trackLabel${i + 1}`}>{trackLabelStrings[i]}</section>
     )
     fullTracks.push(
-      <section className = 'trackContainer' key = {`fullTrack${i +1}`}><section className = 'trackLabel'>{trackLabels[i]}</section><section>{resetTracks[i]}</section>{tracks[i]}</section>
+      <section className = 'trackContainer' key = {`fullTrack${i +1}`}>
+        <section className = 'trackLabel'>{trackLabels[i]}</section>
+        <section className = 'randomizeTrackSection'>{randomizeTracks[i]}</section>
+        <section>{resetTracks[i]}</section>
+        {tracks[i]}
+      </section>
     );
   };
 

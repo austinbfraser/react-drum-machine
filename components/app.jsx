@@ -39,6 +39,20 @@ const App = () => {
     setSeq(nextSeq);
   };
 
+  const randomizeTrackFunc = trackNum => {
+    const nextSeq = seq.map((el, idx) => {
+      if (idx === (trackNum - 1)) {
+        const newArr = el.map(cell => {
+          const random = Math.random();
+          if (random > .6) return 'A1'
+          else return cell
+        })
+        return newArr;
+      } else return el
+    });
+    setSeq(nextSeq);
+  };
+
   const resetAll = () => {
     const nextSeq = Array(trackCount).fill(Array(16).fill(null));
     setSeq(nextSeq);
@@ -163,6 +177,7 @@ const App = () => {
         currentStep = {currentStep}
         isPlaying = {isPlaying}
         resetTrackFunc = {resetTrackFunc}
+        randomizeTrackFunc = {randomizeTrackFunc}
       />
       </div>
     </>
