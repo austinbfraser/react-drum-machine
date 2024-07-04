@@ -10,7 +10,7 @@ const MainGain = props => {
     type = 'range' 
     className='fader'
     min = '0' 
-    max = '10'
+    max = '9'
     defaultValue={props.gain[0] * 10}
     onChange={e => {
       console.log('fader value', e.target.value);

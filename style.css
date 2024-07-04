@@ -23,6 +23,7 @@ body {
   margin-right: 10px;
   width: 70px;
   height: 70px;
+  cursor: pointer;
 
   background-color: lightcoral;
 }
@@ -30,12 +31,15 @@ body {
   margin-right: 10px;
   width: 70px;
   height: 70px;
+  cursor: pointer;
+
   background-color: lightgreen;
 }
 .reset {
   margin-right: 10px;
   width: 70px;
   height: 70px;
+  cursor: pointer;
 }
 .tempoInput {
   font-size: 50px;
@@ -74,6 +78,7 @@ body {
   border-radius: 20px;
   margin-bottom: 1px;
   margin-right: 10px;
+  cursor: pointer;
 }
 .cell {
   width: 30px;
@@ -115,7 +120,7 @@ body {
   appearance: none;
   cursor: pointer;
   border-radius: 10px;
-  background-color: #EFEFEF;
+  background-color: #2A3656;
   border: 1px solid gray;
   height: 5px;
   width: 80px;
@@ -123,6 +128,7 @@ body {
 }
 .fader::-webkit-slider-runnable-track {
   margin-top: 12px;
+  
 }
 .fader::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
@@ -130,7 +136,10 @@ body {
    margin-top: -12px; /* Centers thumb on the track */
 
    /*custom styles*/
-   background-color: #2A3656;
+   background-color: #FF7D01;
    height: 15px;
    width: 5px;
+   border-radius: 2px;
+   border: 1px solid #808080
+   
 }

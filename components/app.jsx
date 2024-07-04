@@ -107,7 +107,7 @@ const App = () => {
 
   useEffect(() => {
     if (gainNodeRef.current) {
-      gainNodeRef.current.gain.exponentialRampToValueAtTime(gain[0], Tone.now() + .2);
+      gainNodeRef.current.gain.exponentialRampToValueAtTime(gain[0], Tone.now() + .05);
     }
   }, [gain]);
 
