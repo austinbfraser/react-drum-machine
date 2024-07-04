@@ -18,6 +18,18 @@ const App = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
 
+  const startClick = async () => {
+    await Tone.start();
+    console.log('audio is running');
+    if (!isPlaying) {
+      setCurrentStep(0);
+      Tone.getTransport().start();
+    } else Tone.getTransport().stop();
+    const flip = !isPlaying;
+    setIsPlaying(flip);
+    console.log('isPlaying: ', flip)
+  };
+  
   const cellClick = (trackNum, cellNum) => {
     let noteValue = 'A1';
     const nextSeq = seq.map((el, idx) => {
@@ -68,7 +80,7 @@ const App = () => {
     setGain(nextGain);
   }
 
-  // SAMPLER AND SEQUENCER CODE --------------------------------------------------------------------------------------------
+  // SAMPLER, SEQUENCER AND GAIN CODE --------------------------------------------------------------------------------------------
   const samplerRef = useRef([]);
   const sequenceRef = useRef([]);
   const stepperRef = useRef(null);
@@ -101,8 +113,6 @@ const App = () => {
       setCurrentStep((prevStep) => (prevStep + 1) % 16);
     }, '16n', '16n');
 
-    
-
     return () => {
       sequenceRef.current.forEach(seq => seq.dispose());
       samplerRef.current.forEach(sampler => sampler.dispose());
@@ -125,26 +135,7 @@ const App = () => {
     }
   }, [gain]);
 
-
-  // useEffect(() => {
-  //   if (mainGain) {
-  //     mainGain.gain.set({ events: gain[0] });
-  //   }
-  // }, [gain]);
-
   // ------------------------------------------------------------------------------------------------------------------------
-
-  const startClick = async () => {
-    await Tone.start();
-    console.log('audio is running');
-    if (!isPlaying) {
-      setCurrentStep(0);
-      Tone.getTransport().start();
-    } else Tone.getTransport().stop();
-    const flip = !isPlaying;
-    setIsPlaying(flip);
-    console.log('isPlaying: ', flip)
-  };
 
   return (
     <>
