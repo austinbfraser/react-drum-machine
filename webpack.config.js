@@ -1,8 +1,8 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-const current_mode = 'development';
-// const current_mode = process.env.NODE_ENV == 'production' ? 'production' : 'development';
+// const current_mode = 'development';
+const current_mode = process.env.NODE_ENV == 'production' ? 'production' : 'development';
 
 module.exports = {
   entry: './index.js',

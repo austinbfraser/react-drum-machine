@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./server.js",
-    "dev": "nodemon ./server.js & webpack serve --open",
+    "build": "NODE_ENV=production nodemon ./server.js & webpack",
+    "dev": "NODE_ENV=development nodemon ./server.js & webpack serve --open",
     "predeploy": "npm run build", 
     "deploy": "gh-pages -d build"
   },

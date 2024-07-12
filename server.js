@@ -13,6 +13,14 @@ const setHeaders = (req, res, next) => {
 
 app.use('/kits', setHeaders, express.static(path.join(__dirname, './kits')));
 
+// statically serve everything in the build folder on the route '/build'
+app.use(express.static(path.join(__dirname, './build')));
+
+// serve index.html on the route '/'
+app.get('/', (req, res) => {
+  return res.status(200).sendFile(path.join(__dirname, './build', 'index.html'));
+});
+
 // Unknown route handler
 app.use((req, res) => res.sendStatus(404));
 
