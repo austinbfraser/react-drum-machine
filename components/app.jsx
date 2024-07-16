@@ -138,19 +138,19 @@ const App = () => {
       samplerRef.current = sampleFiles.map((file, index) => {
         return new Tone.Sampler({
           urls: { A1: file },
-          baseUrl,
+          // baseUrl,
           onload: () => console.log(`sampler${index + 1} loaded`),
         }).connect(gainNodeRef.current);
       });
     };
     
 
-    samplerRef.current = samplerPaths.map((file, index) => {
-      return new Tone.Sampler({
-        urls: { A1: file },
-        onload: () => console.log(`sampler${index + 1} loaded`),
-      }).connect(gainNodeRef.current);
-    });
+    // samplerRef.current = samplerPaths.map((file, index) => {
+    //   return new Tone.Sampler({
+    //     urls: { A1: file },
+    //     onload: () => console.log(`sampler${index + 1} loaded`),
+    //   }).connect(gainNodeRef.current);
+    // });
     
     sequenceRef.current = samplerRef.current.map((sampler, index) => {
       return new Tone.Sequence((time, note) => {
