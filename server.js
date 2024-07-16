@@ -7,7 +7,7 @@ const PORT = 3000;
 
 // middleware to set headers to allow CORS
 const setHeaders = (req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   next();
 };
 
