@@ -138,6 +138,7 @@ const App = () => {
       samplerRef.current = sampleFiles.map((file, index) => {
         return new Tone.Sampler({
           urls: { A1: file },
+          baseUrl,
           onload: () => console.log(`sampler${index + 1} loaded`),
         }).connect(gainNodeRef.current);
       });
