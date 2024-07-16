@@ -5,7 +5,18 @@ import Reset from './reset.jsx';
 import Sequencer from './sequencer.jsx';
 import Tempo from './tempo.jsx';
 import MainGain from './mainGain.jsx';
-import * as path from 'path';
+
+import kickPath from '../kits/909/BD.wav';
+import snarePath from '../kits/909/Snare.wav';
+import clapPath from '../kits/909/Clap.wav';
+import tom1Path from '../kits/909/Tom_1.wav';
+import tom2Path from '../kits/909/Tom_2.wav';
+import tom3Path from '../kits/909/Tom_3.wav';
+import rimPath from '../kits/909/Rim.wav';
+import crashPath from '../kits/909/Crash.wav';
+import ridePath from '../kits/909/Ride.wav';
+import chPath from '../kits/909/CH.wav';
+import ohPath from '../kits/909/OH.wav';
 
 const App = () => {
 
@@ -91,21 +102,52 @@ const App = () => {
     gainNodeRef.current = new Tone.Gain(gain[0]).toDestination();
 
     const current_mode = process.env.NODE_ENV == 'production' ? 'production' : 'development';
-    if (current_mode === 'development') {
-      const baseUrl = "http://localhost:3000/kits/909/";
-    } else if (current_mode === 'production') {
-      const baseUrl = path.resolve(__dirname, 'kits/909')
-    };
+    const baseUrl = current_mode === 'development' ? "http://localhost:3000/kits/909/" : "/kits/909/";
     
     const sampleFiles = [
       'BD.wav', 'Snare.wav', 'Clap.wav', 'Tom_1.wav', 'Tom_2.wav',
       'Tom_3.wav', 'Rim.wav', 'Crash.wav', 'Ride.wav', 'CH.wav', 'OH.wav'
     ];
 
-    samplerRef.current = sampleFiles.map((file, index) => {
+    const samplerPaths = [
+      kickPath,
+      snarePath,
+      clapPath,
+      tom1Path,
+      tom2Path,
+      tom3Path,
+      rimPath,
+      crashPath,
+      ridePath,
+      chPath,
+      ohPath
+    ];
+
+    if (current_mode === 'development') {
+      const baseUrl = "http://localhost:3000/kits/909/";
+    
+      samplerRef.current = sampleFiles.map((file, index) => {
+        return new Tone.Sampler({
+          urls: { A1: file },
+          baseUrl,
+          onload: () => console.log(`sampler${index + 1} loaded`),
+        }).connect(gainNodeRef.current);
+      });
+    } 
+    else if (current_mode === 'production') {
+      samplerRef.current = sampleFiles.map((file, index) => {
+        return new Tone.Sampler({
+          urls: { A1: file },
+          baseUrl,
+          onload: () => console.log(`sampler${index + 1} loaded`),
+        }).connect(gainNodeRef.current);
+      });
+    };
+    
+
+    samplerRef.current = samplerPaths.map((file, index) => {
       return new Tone.Sampler({
         urls: { A1: file },
-        baseUrl,
         onload: () => console.log(`sampler${index + 1} loaded`),
       }).connect(gainNodeRef.current);
     });
