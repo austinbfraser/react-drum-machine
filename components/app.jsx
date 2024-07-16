@@ -5,6 +5,7 @@ import Reset from './reset.jsx';
 import Sequencer from './sequencer.jsx';
 import Tempo from './tempo.jsx';
 import MainGain from './mainGain.jsx';
+import * as path from 'path';
 
 const App = () => {
 
@@ -89,7 +90,13 @@ const App = () => {
   useEffect(() => {
     gainNodeRef.current = new Tone.Gain(gain[0]).toDestination();
 
-    const baseUrl = "http://localhost:3000/kits/909/";
+    const current_mode = process.env.NODE_ENV == 'production' ? 'production' : 'development';
+    if (current_mode === 'development') {
+      const baseUrl = "http://localhost:3000/kits/909/";
+    } else if (current_mode === 'production') {
+      const baseUrl = path.resolve(__dirname, 'kits/909')
+    };
+    
     const sampleFiles = [
       'BD.wav', 'Snare.wav', 'Clap.wav', 'Tom_1.wav', 'Tom_2.wav',
       'Tom_3.wav', 'Rim.wav', 'Crash.wav', 'Ride.wav', 'CH.wav', 'OH.wav'

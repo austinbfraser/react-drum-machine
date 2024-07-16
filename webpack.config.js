@@ -10,6 +10,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js',
+    assetModuleFilename: 'assets/[hash][ext][query]'
   },
   module: {
     rules: [
@@ -32,6 +33,10 @@ module.exports = {
           'style-loader',
           'css-loader'
         ],
+      },
+      {
+        test: /\.(ogg|mp3|wav)$/i,
+        type: 'asset/resource'
       }
     ],
   },
