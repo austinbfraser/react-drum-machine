@@ -102,7 +102,7 @@ const App = () => {
     gainNodeRef.current = new Tone.Gain(gain[0]).toDestination();
 
     const current_mode = process.env.NODE_ENV == 'production' ? 'production' : 'development';
-    const baseUrl = current_mode === 'development' ? "http://localhost:3000/kits/909/" : "/kits/909/";
+    // const baseUrl = current_mode === 'development' ? "http://localhost:3000/kits/909/" : "/kits/909/";
     
     const sampleFiles = [
       'BD.wav', 'Snare.wav', 'Clap.wav', 'Tom_1.wav', 'Tom_2.wav',
@@ -135,10 +135,10 @@ const App = () => {
       });
     } 
     else if (current_mode === 'production') {
-      samplerRef.current = sampleFiles.map((file, index) => {
+      samplerRef.current = samplerPaths.map((file, index) => {
         return new Tone.Sampler({
           urls: { A1: file },
-          baseUrl,
+          // baseUrl,
           onload: () => console.log(`sampler${index + 1} loaded`),
         }).connect(gainNodeRef.current);
       });
