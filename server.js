@@ -11,7 +11,10 @@ const setHeaders = (req, res, next) => {
   next();
 };
 
-app.use('/kits', setHeaders, express.static(path.join(__dirname, './kits')));
+const current_mode = process.env.NODE_ENV == 'production' ? 'production' : 'development';
+if (current_mode === 'development') {
+  app.use('/kits', setHeaders, express.static(path.join(__dirname, './kits')));
+};
 
 // statically serve everything in the build folder on the route '/build'
 app.use(express.static(path.join(__dirname, './build')));
