@@ -104,10 +104,10 @@ const App = () => {
     const current_mode = process.env.NODE_ENV == 'production' ? 'production' : 'development';
     // const baseUrl = current_mode === 'development' ? "http://localhost:3000/kits/909/" : "/kits/909/";
     
-    const sampleFiles = [
-      'BD.wav', 'Snare.wav', 'Clap.wav', 'Tom_1.wav', 'Tom_2.wav',
-      'Tom_3.wav', 'Rim.wav', 'Crash.wav', 'Ride.wav', 'CH.wav', 'OH.wav'
-    ];
+    // const sampleFiles = [
+    //   'BD.wav', 'Snare.wav', 'Clap.wav', 'Tom_1.wav', 'Tom_2.wav',
+    //   'Tom_3.wav', 'Rim.wav', 'Crash.wav', 'Ride.wav', 'CH.wav', 'OH.wav'
+    // ];
 
     const samplerPaths = [
       kickPath,
@@ -123,18 +123,18 @@ const App = () => {
       ohPath
     ];
 
-    if (current_mode === 'development') {
-      const baseUrl = "http://localhost:3000/kits/909/";
+    // if (current_mode === 'development') {
+    //   const baseUrl = "http://localhost:3000/kits/909/";
     
-      samplerRef.current = sampleFiles.map((file, index) => {
-        return new Tone.Sampler({
-          urls: { A1: file },
-          baseUrl,
-          onload: () => console.log(`sampler${index + 1} loaded`),
-        }).connect(gainNodeRef.current);
-      });
-    } 
-    else if (current_mode === 'production') {
+    //   samplerRef.current = sampleFiles.map((file, index) => {
+    //     return new Tone.Sampler({
+    //       urls: { A1: file },
+    //       baseUrl,
+    //       onload: () => console.log(`sampler${index + 1} loaded`),
+    //     }).connect(gainNodeRef.current);
+    //   });
+    // } 
+    // else if (current_mode === 'production') {
       samplerRef.current = samplerPaths.map((file, index) => {
         return new Tone.Sampler({
           urls: { A1: file },
@@ -142,7 +142,7 @@ const App = () => {
           onload: () => console.log(`sampler${index + 1} loaded`),
         }).connect(gainNodeRef.current);
       });
-    };
+    // };
     
 
     // samplerRef.current = samplerPaths.map((file, index) => {
